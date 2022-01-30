@@ -33,7 +33,7 @@ const signin = async (req: NextApiRequest, res: NextApiResponse) => {
 
     res.setHeader(
       "Set-Cookie",
-      cookie.serialize("TRAX_ACCESS_TOKEN", token, {
+      cookie.serialize("LISTAPP_ACCESS_TOKEN", token, {
         httpOnly: true,
         maxAge: 8 * 60 * 60,
         path: "/",
