@@ -31,25 +31,13 @@ const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
             </label>
             <input
               type="email"
+              className="mt-1 block w-full rounded-md 
+              border-gray-300 shadow-sm 
+              focus:border-indigo-300 
+              focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
               onChange={(e) => setEmail(e.target.value)}
-              className="form-control
-              block
-              w-full
-              px-3
-              py-1.5
-              text-base
-              font-normal
-              text-gray-700
-              bg-white bg-clip-padding
-              border border-solid border-gray-300
-              rounded
-              transition
-              ease-in-out
-              m-0
-              focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              placeholder="john@example.com"
               id="exampleInputEmail2"
-              aria-describedby="emailHelp"
-              placeholder="Enter email"
             />
           </div>
           <div className="form-group mb-6">
@@ -60,21 +48,10 @@ const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
             </label>
             <input
               type="password"
-              className="form-control 
-              block
-              w-full
-              px-3
-              py-1.5
-              text-base
-              font-normal
-              text-gray-700
-              bg-white bg-clip-padding
-              border border-solid border-gray-300
-              rounded
-              transition
-              ease-in-out
-              m-0
-              focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              className="mt-1 block w-full rounded-md 
+              border-gray-300 shadow-sm 
+              focus:border-indigo-300 
+              focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
               id="exampleInputPassword2"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
