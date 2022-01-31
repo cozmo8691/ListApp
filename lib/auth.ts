@@ -7,9 +7,11 @@ const {
   serverRuntimeConfig: { JWTSecret },
 } = getConfig();
 
-export const validateRoute = (handler) => {
+export const validateRoute = (
+  handler: (req: NextApiRequest, res: NextApiResponse, user: any) => void
+) => {
   return async (req: NextApiRequest, res: NextApiResponse) => {
-    const token = req.cookies.TRAX_ACCESS_TOKEN;
+    const token = req.cookies.LISTAPP_ACCESS_TOKEN;
 
     if (token) {
       let user;
@@ -37,7 +39,7 @@ export const validateRoute = (handler) => {
   };
 };
 
-export const validateToken = (token = "") => {
+export const validateToken = (token: string) => {
   const user = jwt.verify(token, JWTSecret);
   return user;
 };
