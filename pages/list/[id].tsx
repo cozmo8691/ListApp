@@ -1,28 +1,56 @@
 import { NextPageContext } from "next";
 import Link from "next/link";
 import nookies from "nookies";
-import { FC, FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { update } from "lib/mutations";
 import Button from "components/Button";
+import Input from "components/Input";
+import Modal from "components/Modal";
 
 import { validateToken } from "lib/auth";
 import prisma from "lib/prisma";
 import { JwtPayload } from "jsonwebtoken";
 
 const EditListPage = ({
-  list: { id, name },
+  list: { id, name, items },
 }: {
-  list: { id: number; name: string };
+  list: { id: number; name: string; items: { id: number; name: string }[] };
 }) => {
   const [listName, setListName] = useState(name);
+  const [itemName, setItemName] = useState("");
+  const [allItems, setAllItems] = useState(items);
+  const [newItems, setNewItems] = useState<any>([]);
+  const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    await update({ id, name: listName });
+    await update({ id, name: listName, items: newItems });
     router.push("/");
   };
+
+  const handleItemFormSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setNewItems((newItems: any) => [{ name: itemName }, ...newItems]);
+    setShowModal(false);
+  };
+
+  const ItemForm = (
+    <>
+      <form onSubmit={handleItemFormSubmit}>
+        <Input
+          name="itemNameInput"
+          label="Add item"
+          value={itemName}
+          handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setItemName(e.target.value)
+          }
+        />
+        <Button label="Done" />
+      </form>
+    </>
+  );
 
   return (
     <div className="w-screen h-screen flex flex-col items-center">
@@ -34,27 +62,28 @@ const EditListPage = ({
       </h1>
       <div className="w-300 p-6 rounded-lg shadow-lg bg-white max-w-sm mt-4">
         <form onSubmit={handleSubmit}>
-          <div className="form-group mb-6">
-            <label
-              htmlFor="listName"
-              className="form-label inline-block mb-2 text-gray-700">
-              List name
-            </label>
-            <input
-              type="text"
-              value={listName}
-              className="mt-1 block w-full rounded-md 
-              border-gray-300 shadow-sm 
-              focus:border-indigo-300 
-              focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              onChange={(e) => setListName(e.target.value)}
-              placeholder="Enter list name"
-              id="listName"
-            />
+          <Input
+            name="nameInput"
+            label="Edit list"
+            value={listName}
+            handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setListName(e.target.value)
+            }
+          />
+          {[...items, ...newItems].map((item) => {
+            return <div key={item.name}>{item.name}</div>;
+          })}
+          <div
+            className="my-4 cursor-pointer"
+            onClick={() => setShowModal(true)}>
+            Add item +
           </div>
           <Button label="Save" />
         </form>
       </div>
+      <Modal show={showModal} onClose={() => setShowModal(false)}>
+        {ItemForm}
+      </Modal>
     </div>
   );
 };
@@ -90,7 +119,7 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
       userId: user.id,
     },
     include: {
-      items: {},
+      items: true,
     },
   });
 

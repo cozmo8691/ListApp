@@ -11,6 +11,6 @@ export const create = (body: { name: string }) => {
   return fetcher(`/list/create`, body);
 };
 
-export const update = (body: { id: number; name: string }) => {
+export const update = (body: { id: number; name: string; items: any }) => {
   return fetcher(`/list/update/${body.id}`, body);
 };
