@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "./prisma";
 import getConfig from "next/config";
+import { JwtPayload } from "jsonwebtoken";
 
 const {
   serverRuntimeConfig: { JWTSecret },
@@ -13,11 +14,13 @@ export const validateRoute = (
   return async (req: NextApiRequest, res: NextApiResponse) => {
     const token = req.cookies.LISTAPP_ACCESS_TOKEN;
 
+    type customPayload = JwtPayload & { id: number };
+
     if (token) {
       let user;
 
       try {
-        const { id } = jwt.verify(token, JWTSecret);
+        const { id } = jwt.verify(token, JWTSecret) as customPayload;
         user = await prisma.user.findUnique({
           where: { id },
         });

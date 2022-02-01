@@ -1,6 +1,5 @@
 import { FC, useState } from "react";
 import { useRouter } from "next/router";
-import NextImage from "next/image";
 // import { useSWRConfig } from "swr";
 import { auth } from "lib/mutations";
 
@@ -13,7 +12,6 @@ const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
     await auth(mode, { email, password });
     setIsLoading(false);
     router.push("/");
@@ -57,7 +55,6 @@ const AuthForm: FC<{ mode: "signin" | "signup" }> = ({ mode }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <input />
           <button
             type="submit"
             className="

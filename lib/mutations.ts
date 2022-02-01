@@ -6,3 +6,11 @@ export const auth = (
 ) => {
   return fetcher(`/${mode}`, body);
 };
+
+export const create = (body: { name: string }) => {
+  return fetcher(`/list/create`, body);
+};
+
+export const update = (body: { id: number; name: string }) => {
+  return fetcher(`/list/update/${body.id}`, body);
+};

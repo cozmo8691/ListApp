@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   return (
@@ -13,7 +13,17 @@ const Home: NextPage = () => {
 
       <main className="w-screen h-screen flex flex-col items-center">
         <h1 className="text-center text-6xl w-96 m-12">Welcome to List app</h1>
-        <p>Get started by creating a list</p>
+        <p>
+          Get started by{" "}
+          <Link href="/list/create">
+            <a>creating a list</a>
+          </Link>
+        </p>
+        <p>
+          <Link href="/list">
+            <a>View my lists</a>
+          </Link>
+        </p>
       </main>
 
       <footer>asdf</footer>
