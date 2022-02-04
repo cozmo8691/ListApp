@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { listenerCount } from "process";
 import { itemsData } from "./itemsData";
 
 const prisma = new PrismaClient();
@@ -17,32 +18,30 @@ const run = async () => {
     },
   });
 
+  const list = await prisma.list.create({
+    data: {
+      name: `My list`,
+      description: "not specified",
+      user: {
+        connect: { id: user.id },
+      },
+      items: {},
+    },
+  });
+
   await Promise.all(
     itemsData.map(async (item) => {
       await prisma.item.create({
         data: {
           name: item.name,
           description: item.description,
+          list: {
+            connect: { id: list.id },
+          },
         },
       });
     })
   );
-
-  const items = await prisma.item.findMany({});
-
-  await prisma.list.create({
-    data: {
-      name: `My list`,
-      user: {
-        connect: { id: user.id },
-      },
-      items: {
-        connect: items.map((item) => ({
-          id: item.id,
-        })),
-      },
-    },
-  });
 };
 
 run()

@@ -6,21 +6,25 @@ import { useRouter } from "next/router";
 import { create } from "lib/mutations";
 import Button from "components/Button";
 import Input from "components/Input";
+import Textarea from "components/Textarea";
 
 import { validateToken } from "lib/auth";
-// import prisma from "lib/prisma";
 
 const CreateListPage = () => {
-  const [listName, setListName] = useState("");
-  // const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // setIsLoading(true);
+    setIsLoading(true);
 
-    await create({ name: listName });
-    // setIsLoading(false);
+    const sleep = () => new Promise((resolve) => setTimeout(resolve, 2000));
+    await sleep();
+
+    await create({ name, description });
+    setIsLoading(false);
     router.push("/");
   };
 
@@ -37,13 +41,22 @@ const CreateListPage = () => {
           <Input
             name="nameInput"
             label="List name"
-            value={listName}
+            value={name}
             handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setListName(e.target.value)
+              setName(e.target.value)
             }
             placeholder="Enter list name"
           />
-          <Button label="Create list" />
+          <Textarea
+            name="descriptionInput"
+            label="Description"
+            value={description}
+            handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setDescription(e.target.value)
+            }
+            placeholder="Enter list description"
+          />
+          <Button label="Create list" isLoading={isLoading} />
         </form>
       </div>
     </div>

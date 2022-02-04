@@ -5,6 +5,7 @@ export default validateRoute(async (req, res, user) => {
   const newList = await prisma.list.create({
     data: {
       name: req.body.name,
+      description: req.body.description,
       user: {
         connect: { id: user.id },
       },

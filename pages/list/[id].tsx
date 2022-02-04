@@ -7,32 +7,49 @@ import { update } from "lib/mutations";
 import Button from "components/Button";
 import Input from "components/Input";
 import Modal from "components/Modal";
+import Textarea from "components/Textarea";
 
 import { validateToken } from "lib/auth";
 import prisma from "lib/prisma";
 import { JwtPayload } from "jsonwebtoken";
 
 const EditListPage = ({
-  list: { id, name, items },
+  list: { id, name, items, description },
 }: {
-  list: { id: number; name: string; items: { id: number; name: string }[] };
+  list: {
+    id: number;
+    name: string;
+    description: string;
+    items: { id: number; name: string; description: string }[];
+  };
 }) => {
   const [listName, setListName] = useState(name);
+  const [listDescription, setListDescription] = useState(description);
   const [itemName, setItemName] = useState("");
-  const [allItems, setAllItems] = useState(items);
-  const [newItems, setNewItems] = useState<any>([]);
+  const [itemDescription, setItemDescription] = useState("");
+  const [newItems, setNewItems] = useState<
+    { name: string; description: string }[]
+  >([]);
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    await update({ id, name: listName, items: newItems });
+    await update({
+      id,
+      name: listName,
+      description: listDescription,
+      items: newItems,
+    });
     router.push("/");
   };
 
   const handleItemFormSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setNewItems((newItems: any) => [{ name: itemName }, ...newItems]);
+    setNewItems((newItems: { name: string; description: string }[]) => [
+      { name: itemName, description: itemDescription },
+      ...newItems,
+    ]);
     setShowModal(false);
   };
 
@@ -46,6 +63,15 @@ const EditListPage = ({
           handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setItemName(e.target.value)
           }
+        />
+        <Textarea
+          name="itemDescriptionInput"
+          label="Description"
+          value={itemDescription}
+          handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setItemDescription(e.target.value)
+          }
+          placeholder="Enter item description"
         />
         <Button label="Done" />
       </form>
@@ -69,6 +95,15 @@ const EditListPage = ({
             handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setListName(e.target.value)
             }
+          />
+          <Textarea
+            name="descriptionInput"
+            label="Description"
+            value={listDescription}
+            handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setListDescription(e.target.value)
+            }
+            placeholder="Enter list description"
           />
           {[...items, ...newItems].map((item) => {
             return <div key={item.name}>{item.name}</div>;
