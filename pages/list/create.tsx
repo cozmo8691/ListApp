@@ -1,5 +1,6 @@
 import { NextPageContext } from "next";
 import Link from "next/link";
+import Head from "next/head";
 import nookies from "nookies";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
@@ -9,6 +10,7 @@ import Input from "components/Input";
 import Textarea from "components/Textarea";
 import { validateToken } from "lib/auth";
 import getConfig from "next/config";
+import { useContent } from "content/contentContext";
 
 const {
   publicRuntimeConfig: { logoutUrl },
@@ -19,6 +21,13 @@ const CreateListPage = () => {
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const {
+    createList: {
+      pageTitle,
+      title,
+      form: { listName, listDescription, cta },
+    },
+  } = useContent();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -34,33 +43,35 @@ const CreateListPage = () => {
 
   return (
     <div className="w-screen h-screen flex flex-col items-center">
+      <Head>
+        <title>{pageTitle}</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Link href="/">
         <a>Home</a>
       </Link>
-      <h1 className="text-center text-4xl w-96 mt-12 text-gray-700">
-        Create list
-      </h1>
+      <h1 className="text-center text-4xl w-96 mt-12 text-gray-700">{title}</h1>
       <div className="w-300 p-6 rounded-lg shadow-lg bg-white max-w-sm mt-4">
         <form onSubmit={handleSubmit}>
           <Input
-            name="nameInput"
-            label="List name"
+            name={listName.name}
+            label={listName.label}
             value={name}
             handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setName(e.target.value)
             }
-            placeholder="Enter list name"
+            placeholder={listName.placeholder}
           />
           <Textarea
-            name="descriptionInput"
-            label="Description"
+            name={listDescription.name}
+            label={listDescription.label}
             value={description}
             handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setDescription(e.target.value)
             }
-            placeholder="Enter list description"
+            placeholder={listDescription.placeholder}
           />
-          <Button label="Create list" isLoading={isLoading} />
+          <Button label={cta} isLoading={isLoading} />
         </form>
       </div>
     </div>

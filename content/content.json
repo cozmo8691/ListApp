@@ -1,0 +1,53 @@
+{
+  "home": {
+    "pageTitle": "List app",
+    "title": "Welcome to List app",
+    "createLink": "Create a list",
+    "viewLink": "View my lists"
+  },
+  "createList": {
+    "pageTitle": "List app - Create a list",
+    "title": "Create a List",
+    "form": {
+      "listName": {
+        "name": "listNameInput",
+        "label": "List name",
+        "placeholder": "Enter list name"
+      },
+      "listDescription": {
+        "name": "listDescriptionInput",
+        "label": "List description",
+        "placeholder": "Enter list description"
+      },
+      "cta": "Save"
+    }
+  },
+  "editList": {
+    "pageTitle": "List app - Edit a list",
+    "title": "Edit a List",
+    "form": {
+      "listName": {
+        "name": "listNameInput",
+        "label": "List name",
+        "placeholder": "Enter list name"
+      },
+      "listDescription": {
+        "name": "listDescriptionInput",
+        "label": "List description",
+        "placeholder": "Enter list description"
+      },
+      "itemName": {
+        "name": "itemNameInput",
+        "label": "Item name",
+        "placeholder": "Enter item name"
+      },
+      "itemDescription": {
+        "name": "itemDescriptionInput",
+        "label": "Item description",
+        "placeholder": "Enter item description"
+      },
+      "cta": "Save",
+      "itemCta": "Done"
+    }
+  }
+}

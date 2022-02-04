@@ -12,6 +12,7 @@ import { validateToken } from "lib/auth";
 import prisma from "lib/prisma";
 import { JwtPayload } from "jsonwebtoken";
 import getConfig from "next/config";
+import { useContent } from "content/contentContext";
 
 const {
   publicRuntimeConfig: { logoutUrl },
@@ -36,6 +37,9 @@ const EditListPage = ({
   >([]);
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
+  const {
+    editList: { pageTitle, title, form },
+  } = useContent();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -61,23 +65,24 @@ const EditListPage = ({
     <>
       <form onSubmit={handleItemFormSubmit}>
         <Input
-          name="itemNameInput"
-          label="Add item"
+          name={form.itemName.name}
+          label={form.itemName.label}
           value={itemName}
           handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setItemName(e.target.value)
           }
+          placeholder={form.itemName.placeholder}
         />
         <Textarea
-          name="itemDescriptionInput"
-          label="Description"
+          name={form.itemDescription.name}
+          label={form.itemDescription.label}
           value={itemDescription}
           handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setItemDescription(e.target.value)
           }
-          placeholder="Enter item description"
+          placeholder={form.itemDescription.placeholder}
         />
-        <Button label="Done" />
+        <Button label={form.itemCta} />
       </form>
     </>
   );
@@ -87,27 +92,26 @@ const EditListPage = ({
       <Link href="/">
         <a>Home</a>
       </Link>
-      <h1 className="text-center text-4xl w-96 mt-12 text-gray-700">
-        Edit list
-      </h1>
+      <h1 className="text-center text-4xl w-96 mt-12 text-gray-700">{title}</h1>
       <div className="w-300 p-6 rounded-lg shadow-lg bg-white max-w-sm mt-4">
         <form onSubmit={handleSubmit}>
           <Input
-            name="nameInput"
-            label="Edit list"
+            name={form.listName.name}
+            label={form.listName.label}
             value={listName}
             handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setListName(e.target.value)
             }
+            placeholder={form.listName.placeholder}
           />
           <Textarea
-            name="descriptionInput"
-            label="Description"
+            name={form.listDescription.name}
+            label={form.listDescription.label}
             value={listDescription}
             handleChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setListDescription(e.target.value)
             }
-            placeholder="Enter list description"
+            placeholder={form.listDescription.placeholder}
           />
           {[...items, ...newItems].map((item) => {
             return <div key={item.name}>{item.name}</div>;
@@ -117,7 +121,7 @@ const EditListPage = ({
             onClick={() => setShowModal(true)}>
             Add item +
           </div>
-          <Button label="Save" />
+          <Button label={form.cta} />
         </form>
       </div>
       <Modal show={showModal} onClose={() => setShowModal(false)}>
