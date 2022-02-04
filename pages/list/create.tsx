@@ -7,8 +7,12 @@ import { create } from "lib/mutations";
 import Button from "components/Button";
 import Input from "components/Input";
 import Textarea from "components/Textarea";
-
 import { validateToken } from "lib/auth";
+import getConfig from "next/config";
+
+const {
+  publicRuntimeConfig: { logoutUrl },
+} = getConfig();
 
 const CreateListPage = () => {
   const [name, setName] = useState("");
@@ -65,14 +69,14 @@ const CreateListPage = () => {
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
   const cookies = nookies.get(ctx);
-  let user;
+
   try {
-    user = validateToken(cookies.LISTAPP_ACCESS_TOKEN);
+    validateToken(cookies.LISTAPP_ACCESS_TOKEN);
   } catch (e) {
     return {
       redirect: {
         permanent: false,
-        destination: "/signin",
+        destination: logoutUrl,
       },
     };
   }

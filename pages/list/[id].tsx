@@ -8,10 +8,14 @@ import Button from "components/Button";
 import Input from "components/Input";
 import Modal from "components/Modal";
 import Textarea from "components/Textarea";
-
 import { validateToken } from "lib/auth";
 import prisma from "lib/prisma";
 import { JwtPayload } from "jsonwebtoken";
+import getConfig from "next/config";
+
+const {
+  publicRuntimeConfig: { logoutUrl },
+} = getConfig();
 
 const EditListPage = ({
   list: { id, name, items, description },
@@ -127,17 +131,17 @@ export const getServerSideProps = async (ctx: NextPageContext) => {
   const cookies = nookies.get(ctx);
   const { query } = ctx;
 
-  type customPayload = JwtPayload & { id: number };
+  type userPayload = JwtPayload & { id: number };
 
-  let user: customPayload;
+  let user: userPayload;
 
   try {
-    user = validateToken(cookies.LISTAPP_ACCESS_TOKEN) as customPayload;
+    user = validateToken(cookies.LISTAPP_ACCESS_TOKEN) as userPayload;
   } catch (e) {
     return {
       redirect: {
         permanent: false,
-        destination: "/signin",
+        destination: logoutUrl,
       },
     };
   }

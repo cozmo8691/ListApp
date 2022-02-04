@@ -7,6 +7,7 @@ const nextConfig = {
   },
   publicRuntimeConfig: {
     staticFolder: "/static",
+    logoutUrl: "auth/signin",
   },
 };
 

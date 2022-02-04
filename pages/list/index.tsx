@@ -1,10 +1,14 @@
 import { NextPageContext } from "next";
 import Link from "next/link";
 import nookies from "nookies";
-import { useRouter } from "next/router";
-
 import { validateToken } from "lib/auth";
 import prisma from "lib/prisma";
+import getConfig from "next/config";
+import { JwtPayload } from "jsonwebtoken";
+
+const {
+  publicRuntimeConfig: { logoutUrl },
+} = getConfig();
 
 const EditListPage = ({
   lists = [],
@@ -39,14 +43,16 @@ const EditListPage = ({
 export const getServerSideProps = async (ctx: NextPageContext) => {
   const cookies = nookies.get(ctx);
 
-  let user;
+  type userPayload = JwtPayload & { id: number };
+
+  let user: userPayload;
   try {
-    user = validateToken(cookies.LISTAPP_ACCESS_TOKEN);
+    user = validateToken(cookies.LISTAPP_ACCESS_TOKEN) as userPayload;
   } catch (e) {
     return {
       redirect: {
         permanent: false,
-        destination: "/signin",
+        destination: logoutUrl,
       },
     };
   }
