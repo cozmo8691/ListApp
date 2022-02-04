@@ -38,7 +38,7 @@ const EditListPage = ({
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const {
-    editList: { pageTitle, title, form },
+    editList: { title, form },
   } = useContent();
 
   const handleSubmit = async (e: FormEvent) => {

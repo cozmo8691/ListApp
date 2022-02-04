@@ -1,10 +1,16 @@
-import type { NextPage } from "next";
+import { NextPageContext } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import prisma from "lib/prisma";
+import Card from "components/Card";
 
 import { useContent } from "content/contentContext";
 
-const Home: NextPage = () => {
+const Home = ({
+  lists = [],
+}: {
+  lists: { id: number; name: string; description: string }[];
+}) => {
   const {
     home: { pageTitle, title, createLink, viewLink },
   } = useContent();
@@ -27,9 +33,27 @@ const Home: NextPage = () => {
             <a>{viewLink}</a>
           </Link>
         </p>
+        <div className="w-4/5 flex justify-start items-start flex-wrap">
+          {lists.map((props) => (
+            <Card key={props.id} {...props} />
+          ))}
+        </div>
       </main>
     </div>
   );
+};
+
+export const getServerSideProps = async (ctx: NextPageContext) => {
+  const lists = await prisma.list.findMany({
+    where: {},
+    // include: {
+    //   items: {},
+    // },
+  });
+
+  return {
+    props: { lists },
+  };
 };
 
 export default Home;
